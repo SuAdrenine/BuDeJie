@@ -1,0 +1,32 @@
+//
+//  PrefixHeader.pch
+//
+//  Created by XBY on 2016/10/15.
+//  Copyright © 2016年 XBY. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#ifdef __OBJC__
+
+//类扩展
+#import "UIView+XBYExtension.h"
+#import "UIBarButtonItem+XBYExtension.h"
+#import "UITextField+XBYExtension.h"
+#import "NSString+XBYExtension.h"
+#import "UIImage+EXtension.h"
+#import "UIImageView+Extension.h"
+#import "NSString+DateExtension.h"
+#import "NSDate+Extension.h"
+#import "NSCalendar+Extension.h"
+
+//常量
+#import "XBYConst.h"
+
+//宏
+#import "CommonMacro.h"
+
+#endif
+
+#endif /* PrefixHeader_pch */
