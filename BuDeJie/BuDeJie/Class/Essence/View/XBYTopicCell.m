@@ -61,21 +61,20 @@
 -(void)setupSubViews {
     [self.contentView addSubview:self.bgView];
     
-    [self.bgView addSubview:self.centerView];
-    [self.centerView addSubview:self.topicImageView];
-    [self.centerView addSubview:self.topicVoiceView];
-    [self.centerView addSubview:self.topicVideoView];
-    
     [self.bgView addSubview:self.headView];
     [self.bgView addSubview:self.mainInfoLB];
+    [self.bgView addSubview:self.centerView];
     [self.bgView addSubview:self.commentFatherView];
     [self.bgView addSubview:self.toolsView];
-    
     
     [self.headView addSubview:self.headImageView];
     [self.headView addSubview:self.nameLB];
     [self.headView addSubview:self.timeLB];
     [self.headView addSubview:self.moreBtn];
+
+    [self.centerView addSubview:self.topicImageView];
+    [self.centerView addSubview:self.topicVoiceView];
+    [self.centerView addSubview:self.topicVideoView];
     
     [self.commentFatherView addSubview:self.commentTitleLB];
     [self.commentFatherView addSubview:self.commentLB];
@@ -101,7 +100,7 @@
     
     [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.left.equalTo(self.headView).offset(2);
+        make.left.equalTo(self.headView).offset(5);
         make.centerY.equalTo(self.headView);
         make.size.mas_equalTo(CGSizeMake(45, 45));
     }];
@@ -131,8 +130,8 @@
     
     [self.centerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.bgView);
-        make.top.equalTo(self.mainInfoLB.mas_bottom).offset(2);
-        make.height.equalTo(@48);
+        make.top.equalTo(self.mainInfoLB.mas_bottom).offset(15);
+        make.height.equalTo(@128);
     }];
     
     [self.topicImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -147,7 +146,7 @@
     }];
 
     [self.commentFatherView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.centerView.mas_bottom).offset(3);
+        make.top.equalTo(self.centerView.mas_bottom).offset(15);
         make.left.right.equalTo(self.bgView);
         make.height.mas_equalTo(68);
     }];
@@ -166,18 +165,12 @@
     }];
     
     [self.toolsView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.commentFatherView.mas_bottom).offset(3);
-        make.left.right.bottom.equalTo(self.bgView);
+        make.top.equalTo(self.commentFatherView.mas_bottom).offset(15);
+        make.left.right.equalTo(self.bgView);
         make.height.mas_equalTo(35);
+        make.bottom.equalTo(self.bgView).offset(-5);
     }];
     
-//    NSArray *array = @[self.dingBtn,self.caiBtn,self.zhuanBtn,self.commentBtn];
-//    [array mas_distributeViewsAlongAxis:MASAxisTypeHorizontal
-//                       withFixedSpacing:0 leadSpacing:0 tailSpacing:0];
-//    
-//    [array mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.equalTo(self.toolsView);
-//    }];
 }
 
 -(void)setTopicModel:(XBYTopic *)topicModel {
@@ -194,34 +187,34 @@
     //中间内容
     if (topicModel.type == TopicTypePicture) {
         self.topicImageView.hidden = NO;
-        self.topicImageView.frame = topicModel.contentF;
-        CGFloat height = topicModel.contentF.size.height;
-        [self.centerView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.height.mas_equalTo(height);
-        }];
+//        self.topicImageView.frame = topicModel.contentF;
         self.topicImageView.topicModel = topicModel;
         self.topicVideoView.hidden = YES;
         self.topicVoiceView.hidden = YES;
-    } else if(topicModel.type == TopicTypeVoice) {
-        self.topicVoiceView.hidden = NO;
-        self.topicVoiceView.frame = topicModel.contentF;
         CGFloat height = topicModel.contentF.size.height;
         [self.centerView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(height);
         }];
+    } else if(topicModel.type == TopicTypeVoice) {
+        self.topicVoiceView.hidden = NO;
+//        self.topicVoiceView.frame = topicModel.contentF;
         self.topicVoiceView.topicModel = topicModel;
         self.topicImageView.hidden = YES;
         self.topicVideoView.hidden = YES;
-    } else if (topicModel.type == TopicTypeVideo) {
-        self.topicVideoView.hidden = NO;
-        self.topicVideoView.frame = topicModel.contentF;
         CGFloat height = topicModel.contentF.size.height;
         [self.centerView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(height);
         }];
+    } else if (topicModel.type == TopicTypeVideo) {
+        self.topicVideoView.hidden = NO;
+//        self.topicVideoView.frame = topicModel.contentF;
         self.topicVideoView.topicModel = topicModel;
         self.topicImageView.hidden = YES;
         self.topicVoiceView.hidden = YES;
+        CGFloat height = topicModel.contentF.size.height;
+        [self.centerView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(height);
+        }];
     } else if (topicModel.type == TopicTypeWord) {
         self.topicImageView.hidden = YES;
         self.topicVideoView.hidden = YES;
@@ -239,9 +232,20 @@
         NSString *content = comment.content;    //评论内容
         self.commentLB.text = [NSString stringWithFormat:@"%@ : %@",userName, content];
     } else {    //没有最新评论
-        self.commentFatherView.hidden = YES;
+//        self.commentFatherView.hidden = YES;
+        [self.commentFatherView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0.0001);
+        }];
     }
     
+    NSArray *array = @[self.dingBtn,self.caiBtn,self.zhuanBtn,self.commentBtn];
+    [array mas_distributeViewsAlongAxis:MASAxisTypeHorizontal
+                       withFixedSpacing:0 leadSpacing:0 tailSpacing:0];
+    
+    [array mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(self.toolsView);
+        make.top.bottom.equalTo(self.toolsView);
+    }];
     //工具条
     [self setTitle:topicModel.ding button:self.dingBtn placeHolder:@"顶"];
     [self setTitle:topicModel.hate button:self.caiBtn placeHolder:@"踩"];
@@ -263,11 +267,9 @@
     NSInteger count = [number integerValue];
     if (count >= 10000) {
         [button setTitle:[NSString stringWithFormat:@"%ld万",count/10000] forState:UIControlStateNormal];
-    }else if (number > 0)
-    {
+    } else if (number > 0) {
         [button setTitle:[NSString stringWithFormat:@"%ld",count] forState:UIControlStateNormal];
-    }else
-    {
+    } else {
         [button setTitle:placeHolder forState:UIControlStateNormal];
     }
 }
@@ -320,18 +322,58 @@
 
 ViewGetter(bgView, [UIColor whiteColor])
 ImageViewGetter(headImageView, @"cellmorebtnnormal")
-ViewGetter(headView, [UIColor whiteColor])
-ViewGetter(centerView, [UIColor whiteColor])
+ViewGetter(headView, [UIColor redColor])
+ViewGetter(centerView, [UIColor greenColor])
 LabelGetter(nameLB, NSTextAlignmentLeft, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(13.5)])
 LabelGetter(timeLB, NSTextAlignmentLeft, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(13.5)])
 ButtonGetterWithCode(moreBtn, [UIColor whiteColor], [UIFont systemFontOfSize:13.5], [UIImage imageNamed:@"cellmorebtnnormal"], 0, [_moreBtn  addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];)
 LabelGetter(mainInfoLB, NSTextAlignmentLeft, ColorFromRGB(XBYBlack), [UIFont systemFontOfSize:CalcFont(14.5)])
-ViewGetter(commentFatherView, [UIColor whiteColor])
+ViewGetter(commentFatherView, [UIColor purpleColor])
 LabelGetterWithCode(commentTitleLB, NSTextAlignmentLeft, ColorFromRGB(XBYBlack), [UIFont systemFontOfSize:CalcFont(14)],_commentTitleLB.text = @"最新评论";)
 LabelGetter(commentLB, NSTextAlignmentLeft, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:13.5])
-ViewGetter(toolsView, [UIColor whiteColor])
-ButtonGetterWithCode(dingBtn, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(12)], [UIImage imageNamed:@"mainCellDing"], 0, ;)
-ButtonGetterWithCode(caiBtn, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(12)], [UIImage imageNamed:@"mainCellCai"], 0, ;)
-ButtonGetterWithCode(zhuanBtn, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(12)], [UIImage imageNamed:@"mainCellShare"], 0, ;)
-ButtonGetterWithCode(commentBtn, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(12)], [UIImage imageNamed:@"mainCellComment"], 0, ;)
+ViewGetter(toolsView, [UIColor yellowColor])
+
+-(UIButton *)dingBtn {
+    if (!_dingBtn) {
+        _dingBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_dingBtn setTitleColor:ColorFromRGB(XBYGray) forState:UIControlStateNormal];
+        _dingBtn.titleLabel.font = [UIFont systemFontOfSize:CalcFont(12)];
+        [_dingBtn setImage:[UIImage imageNamed:@"mainCellDing"] forState:UIControlStateNormal];
+    }
+    
+    return _dingBtn;
+}
+
+-(UIButton *)caiBtn {
+    if (!_caiBtn) {
+        _caiBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_caiBtn setTitleColor:ColorFromRGB(XBYGray) forState:UIControlStateNormal];
+        _caiBtn.titleLabel.font = [UIFont systemFontOfSize:CalcFont(12)];
+        [_caiBtn setImage:[UIImage imageNamed:@"mainCellCai"] forState:UIControlStateNormal];
+    }
+    
+    return _caiBtn;
+}
+-(UIButton *)zhuanBtn {
+    if (!_zhuanBtn) {
+        _zhuanBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_zhuanBtn setTitleColor:ColorFromRGB(XBYGray) forState:UIControlStateNormal];
+        _zhuanBtn.titleLabel.font = [UIFont systemFontOfSize:CalcFont(12)];
+        [_zhuanBtn setImage:[UIImage imageNamed:@"mainCellShare"] forState:UIControlStateNormal];
+    }
+    
+    return _zhuanBtn;
+}
+-(UIButton *)commentBtn {
+    if (!_commentBtn) {
+        _commentBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_commentBtn setTitleColor:ColorFromRGB(XBYGray) forState:UIControlStateNormal];
+        _commentBtn.titleLabel.font = [UIFont systemFontOfSize:CalcFont(12)];
+        [_commentBtn setImage:[UIImage imageNamed:@"mainCellComment"] forState:UIControlStateNormal];
+    }
+    
+    return _commentBtn;
+}
+
+
 @end
