@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface XBYTopicCell : UIView
+@class XBYTopic;
+
+@interface XBYTopicCell : UITableViewCell
+
+@property (nonatomic, strong) XBYTopic *topicModel;
 
 @end

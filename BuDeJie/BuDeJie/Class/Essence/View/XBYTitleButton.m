@@ -10,4 +10,16 @@
 
 @implementation XBYTitleButton
 
+-(instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        [self setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+        [self setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
+    }
+    return self;
+}
+
+-(void)setHighlighted:(BOOL)highlighted {
+    
+}
+
 @end

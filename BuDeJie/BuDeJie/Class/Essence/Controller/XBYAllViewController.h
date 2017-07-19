@@ -6,8 +6,8 @@
 //  Copyright © 2017年 xby. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "XBYTopicViewController.h"
 
-@interface XBYAllViewController : UIViewController
+@interface XBYAllViewController : XBYTopicViewController
 
 @end

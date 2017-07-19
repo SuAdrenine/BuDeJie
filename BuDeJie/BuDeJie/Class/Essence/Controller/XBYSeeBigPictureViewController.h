@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class XBYTopic;
 @interface XBYSeeBigPictureViewController : UIViewController
+
+@property (nonatomic, strong) XBYTopic *topicModel;
 
 @end

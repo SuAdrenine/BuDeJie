@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class XBYTopic;
 @interface XBYTopicImage : UIView
+
+@property (nonatomic, strong) XBYTopic *topicModel;
 
 @end

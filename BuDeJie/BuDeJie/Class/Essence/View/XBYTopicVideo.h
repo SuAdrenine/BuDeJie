@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@class XBYTopic;
 @interface XBYTopicVideo : UIView
+
+@property (nonatomic, strong) XBYTopic *topicModel;
 
 @end

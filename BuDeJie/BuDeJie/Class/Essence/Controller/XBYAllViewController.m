@@ -21,6 +21,9 @@
     
 }
 
+-(TopicType)type {
+    return TopicTypeAll;
+}
 
 
 - (void)didReceiveMemoryWarning {

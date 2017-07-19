@@ -45,6 +45,9 @@ PODS:
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
   - SVProgressHUD (2.1.2)
+  - YYCategories (1.0.4):
+    - YYCategories/no-arc (= 1.0.4)
+  - YYCategories/no-arc (1.0.4)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.1.0)
@@ -56,6 +59,7 @@ DEPENDENCIES:
   - POP+MCAnimate (~> 2.0.1)
   - SDWebImage (~> 4.0.0)
   - SVProgressHUD (~> 2.1.2)
+  - YYCategories (~> 1.0.2)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
@@ -67,7 +71,8 @@ SPEC CHECKSUMS:
   POP+MCAnimate: a99e209148c602512de487f1160a44bf78572024
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   SVProgressHUD: c404a55d78acbeb7ebb78b76d3faf986475a6994
+  YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
 
-PODFILE CHECKSUM: d92ef143291377a5b755525c27ea4ed441787f1c
+PODFILE CHECKSUM: ad4782e7d6bc8f0a7eb073fcadd2b6dd932bac00
 
 COCOAPODS: 1.0.1

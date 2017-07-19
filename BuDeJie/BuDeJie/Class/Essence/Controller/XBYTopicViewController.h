@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XBYTopic.h"
 
-@interface XBYTopicViewController : UIViewController
+@interface XBYTopicViewController : UITableViewController
+
+- (TopicType)type;
 
 @end
