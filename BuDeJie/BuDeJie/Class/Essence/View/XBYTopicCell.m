@@ -85,6 +85,7 @@
     [self.toolsView addSubview:self.commentBtn];
     
     self.mainInfoLB.numberOfLines = 0;
+    self.mainInfoLB.lineBreakMode = NSLineBreakByWordWrapping;
 }
 
 -(void)setupSubViewsLayout {
@@ -100,9 +101,12 @@
     
     [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         
-        make.left.equalTo(self.headView).offset(5);
+        make.left.equalTo(self.headView).offset(12);
         make.centerY.equalTo(self.headView);
-        make.size.mas_equalTo(CGSizeMake(45, 45));
+//        make.size.mas_equalTo(CGSizeMake(45, 45));
+        make.top.equalTo(self.headView).offset(2);
+        make.bottom.equalTo(self.headView).offset(-2);
+        make.width.mas_equalTo(self.headImageView.mas_height);
     }];
     
     [self.nameLB mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -123,9 +127,9 @@
     }];
     
     [self.mainInfoLB mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.headView.mas_bottom);
+        make.top.equalTo(self.headView.mas_bottom).offset(12);
         make.left.right.equalTo(self.bgView);
-        make.height.mas_equalTo(20);
+//        make.height.mas_equalTo(20);
     }];
     
     [self.centerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -171,6 +175,14 @@
         make.bottom.equalTo(self.bgView).offset(-5);
     }];
     
+    NSArray *array = @[self.dingBtn,self.caiBtn,self.zhuanBtn,self.commentBtn];
+    [array mas_distributeViewsAlongAxis:MASAxisTypeHorizontal
+                       withFixedSpacing:0 leadSpacing:0 tailSpacing:0];
+    
+    [array mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(self.toolsView);
+        make.top.bottom.equalTo(self.toolsView);
+    }];
 }
 
 -(void)setTopicModel:(XBYTopic *)topicModel {
@@ -236,31 +248,45 @@
         [self.commentFatherView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(0.0001);
         }];
+        [self.toolsView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.commentFatherView.mas_bottom).offset(2);
+        }];
     }
     
-    NSArray *array = @[self.dingBtn,self.caiBtn,self.zhuanBtn,self.commentBtn];
-    [array mas_distributeViewsAlongAxis:MASAxisTypeHorizontal
-                       withFixedSpacing:0 leadSpacing:0 tailSpacing:0];
-    
-    [array mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(self.toolsView);
-        make.top.bottom.equalTo(self.toolsView);
-    }];
     //工具条
     [self setTitle:topicModel.ding button:self.dingBtn placeHolder:@"顶"];
     [self setTitle:topicModel.hate button:self.caiBtn placeHolder:@"踩"];
     [self setTitle:topicModel.repost button:self.zhuanBtn placeHolder:@"转发"];
     [self setTitle:topicModel.comment button:self.commentBtn placeHolder: @"评论"];
     
-    CGSize constrainedSize = CGSizeMake(0, MAXFLOAT);
-    CGRect textRect = [topicModel.text boundingRectWithSize:constrainedSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil];
-    CGFloat height = textRect.size.height;
+//    CGSize constrainedSize = CGSizeMake(kScreenWidth, MAXFLOAT);
+//    CGRect textRect = [self.mainInfoLB.text boundingRectWithSize:constrainedSize options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil];
+//    CGFloat height = textRect.size.height;
+//    CGFloat width = textRect.size.width;
+//
+//    [self.mainInfoLB mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.headView.mas_bottom);
+//        make.left.right.equalTo(self.bgView);
+//        make.height.mas_equalTo(height);
+//    }];
+}
+
+//计算UILabel的高度(带有行间距的情况)
+-(CGFloat)getSpaceLabelHeight:(NSString*)str withFont:(UIFont*)font withWidth:(CGFloat)width {
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.lineBreakMode =NSLineBreakByCharWrapping;
+    paraStyle.alignment =NSTextAlignmentLeft;
+    paraStyle.lineSpacing = 0.5;
+    paraStyle.hyphenationFactor = 1.0;
+    paraStyle.firstLineHeadIndent =0.0;
+    paraStyle.paragraphSpacingBefore =0.0;
+    paraStyle.headIndent = 0;
+    paraStyle.tailIndent = 0;
+    NSDictionary *dic =@{NSFontAttributeName:font,NSParagraphStyleAttributeName:paraStyle,NSKernAttributeName:@1.5f
+                         };
     
-    [self.mainInfoLB mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.headView.mas_bottom);
-        make.left.right.equalTo(self.bgView);
-        make.height.mas_equalTo(height);
-    }];
+    CGSize size = [str boundingRectWithSize:CGSizeMake(width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil].size;
+    return size.height;
 }
 
 - (void)setTitle:(NSString *)number button:(UIButton *)button placeHolder:(NSString *)placeHolder {
@@ -321,13 +347,13 @@
 }
 
 ViewGetter(bgView, [UIColor whiteColor])
-ImageViewGetter(headImageView, @"cellmorebtnnormal")
+ImageViewGetter(headImageView, @"")
 ViewGetter(headView, [UIColor redColor])
 ViewGetter(centerView, [UIColor greenColor])
 LabelGetter(nameLB, NSTextAlignmentLeft, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(13.5)])
 LabelGetter(timeLB, NSTextAlignmentLeft, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:CalcFont(13.5)])
 ButtonGetterWithCode(moreBtn, [UIColor whiteColor], [UIFont systemFontOfSize:13.5], [UIImage imageNamed:@"cellmorebtnnormal"], 0, [_moreBtn  addTarget:self action:@selector(moreBtnClick:) forControlEvents:UIControlEventTouchUpInside];)
-LabelGetter(mainInfoLB, NSTextAlignmentLeft, ColorFromRGB(XBYBlack), [UIFont systemFontOfSize:CalcFont(14.5)])
+LabelGetter(mainInfoLB, NSTextAlignmentLeft, ColorFromRGB(XBYBlack), [UIFont systemFontOfSize:CalcFont(15)])
 ViewGetter(commentFatherView, [UIColor purpleColor])
 LabelGetterWithCode(commentTitleLB, NSTextAlignmentLeft, ColorFromRGB(XBYBlack), [UIFont systemFontOfSize:CalcFont(14)],_commentTitleLB.text = @"最新评论";)
 LabelGetter(commentLB, NSTextAlignmentLeft, ColorFromRGB(XBYGray), [UIFont systemFontOfSize:13.5])
